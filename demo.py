@@ -17,7 +17,9 @@ wget.download(url)
 es_server = Popen(
     ["elasticsearch-7.9.2/bin/elasticsearch"], stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1)  # as daemon
 )
-! sleep 30
+
+import time
+time.sleep(30)
 
 from haystack.document_stores import ElasticsearchDocumentStore
 document_store = ElasticsearchDocumentStore(
