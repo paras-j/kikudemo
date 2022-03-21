@@ -9,6 +9,8 @@ import logging
 import subprocess
 import time
 
+launch_es()
+
 document_store = ElasticsearchDocumentStore(host="localhost", username="", password="",
                                             index="document",
                                             embedding_field="question_emb",
