@@ -78,22 +78,24 @@ from subprocess import Popen, PIPE, STDOUT
 
 import wget
 url = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz'
-print("I am at 81")
+
 import tarfile
 filename = tarfile.open(wget.download(url))
+st.write("ES Tar opened")
 filename.extractall('./')
 filename.close()
-print("I am at 86")
+st.write("Extracted file")
 #! wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz -q
 #! tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz
 #! chown -R daemon:daemon elasticsearch-7.9.2
 # import os
 # from subprocess import Popen, PIPE, STDOUT
 es_server = Popen(["elasticsearch-7.9.2/bin/elasticsearch"], stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1)  # as daemon)
-print("I am at 93")
+
 import time
 time.sleep(30)
-print("I am at 96")
+st.write("ES server started")
+                  
 from haystack.document_stores import ElasticsearchDocumentStore
 document_store = ElasticsearchDocumentStore(
     host="localhost",
@@ -105,7 +107,8 @@ document_store = ElasticsearchDocumentStore(
     excluded_meta_data=["question_emb"],
 )
 print("I am at 107")
-@st.cache(allow_output_mutation=True)
+                  
+@st.cache(allow_output_mutation=True, suppress_st_warning=True)
 def get_document_store():
   temp_rce = requests.get("https://raw.githubusercontent.com/paras-j/EP_FAQs/main/RCE_FAQs.csv")
   open("faq_rce.csv", "wb").write(temp_rce.content)
@@ -125,10 +128,12 @@ def get_document_store():
   docs_to_index = df.to_dict(orient="records")
   document_store.write_documents(docs_to_index)
   return document_store
-print("I am at 128")
-@st.cache(allow_output_mutation=True)
+
+@st.cache(allow_output_mutation=True, suppress_st_warning=True)
 def get_retriever():
+  st.write("entered get_retreiver()")
   retriever = EmbeddingRetriever(document_store=get_document_store(), embedding_model="sentence-transformers/all-MiniLM-L6-v2", use_gpu=True)
+  st.write("Got retreiver")
   return retriever
 
 from haystack.pipelines import FAQPipeline
