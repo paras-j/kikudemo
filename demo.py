@@ -70,6 +70,7 @@ from haystack.document_stores import ElasticsearchDocumentStore
 from haystack.nodes import EmbeddingRetriever
 import pandas as pd
 import requests
+import streamlit as st
 
 # import os
 # from subprocess import Popen, PIPE, STDOUT
@@ -164,5 +165,5 @@ if text:
     st.write("Response:")
     with st.spinner('Searching for answers....'):
       prediction = pipe.run(query=text, params={"Retriever": {"top_k": 1}})
-      st.write('answer: {}'.format(print_answers(prediction, details="medium")))
+      st.write('answer: {}'.format(print_answers(prediction, details="minimum")))
     st.write("")                  
