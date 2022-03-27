@@ -82,7 +82,7 @@ wget.download(url)
 # os.system("wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz -q")
 os.system("tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz")
 os.system("chown -R daemon:daemon elasticsearch-7.9.2")
-es_server = subprocess.Popen(['elasticsearch-7.9.2/bin/elasticsearch'], stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
+es_server = subprocess.Popen(['elasticsearch-7.9.2/bin/elasticsearch'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, preexec_fn=lambda: os.setuid(1))
 
 # es_server = subprocess.Popen(['elasticsearch-7.9.2/bin/elasticsearch'],stdout=PIPE, stderr=STDOUT, preexec_fn=os.setuid(1))
 
