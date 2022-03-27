@@ -97,19 +97,19 @@ import streamlit as st
 # time.sleep(30)
 # st.write("ES server started")
 
-codeStartES = '''url = """https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz"""
-!wget -nc -q {url}
-!tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz
+code = '''url = """https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz"""
+RUN wget -nc -q {url}
+RUN tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz
 
 import os
 from subprocess import Popen, PIPE, STDOUT
-!chown -R daemon:daemon elasticsearch-7.9.2
+RUN chown -R daemon:daemon elasticsearch-7.9.2
 es_server = Popen(args=['elasticsearch-7.9.2/bin/elasticsearch'],
                   stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
 !sleep 30'''
 
 @st.cache(allow_output_mutation=True, suppress_st_warning=True)
-st.code(codeStartES, language='python')
+st.code(code, language='python')
                   
 from haystack.document_stores import ElasticsearchDocumentStore
 document_store = ElasticsearchDocumentStore(
