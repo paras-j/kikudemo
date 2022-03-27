@@ -6,6 +6,7 @@ pandas
 wget
 requests
 chardet
+numba
 
 
 #pip==22.0.4
