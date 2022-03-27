@@ -76,10 +76,10 @@ from subprocess import Popen, PIPE, STDOUT
 import wget
 import time
 
-# url = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz'
+url = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz'
 # os.system("wget -nc -q {url}")
-
-os.system("wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz -q")
+wget.download(url)
+# os.system("wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz -q")
 os.system("tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz")
 os.system("chown -R daemon:daemon elasticsearch-7.9.2")
 # es_server = Popen(args=['elasticsearch-7.9.2/bin/elasticsearch'], stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
