@@ -76,18 +76,15 @@ from subprocess import Popen, PIPE, STDOUT
 import wget
 import time
 
-@st.cache(allow_output_mutation=True, suppress_st_warning=True)
-def startES():
-    url = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz'
-    os.system("wget -nc -q {url}")
-    
-    os.system("wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz -q")
-    os.system("tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz")
-    os.system("chown -R daemon:daemon elasticsearch-7.9.2")
-    es_server = Popen(args=['elasticsearch-7.9.2/bin/elasticsearch'],
-                      stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
-    time.sleep(30)
-    return
+# url = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz'
+# os.system("wget -nc -q {url}")
+
+os.system("wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz -q")
+os.system("tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz")
+os.system("chown -R daemon:daemon elasticsearch-7.9.2")
+es_server = Popen(args=['elasticsearch-7.9.2/bin/elasticsearch'],
+                  stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
+time.sleep(30)
 
 # import tarfile
 # filename = tarfile.open(wget.download(url))
@@ -119,8 +116,6 @@ def startES():
 
 # @st.cache(allow_output_mutation=True, suppress_st_warning=True)
 # st.code(code, language='python')
-
-startES()
                   
 from haystack.document_stores import ElasticsearchDocumentStore
 document_store = ElasticsearchDocumentStore(
@@ -176,5 +171,5 @@ if text:
     st.write("Response:")
     with st.spinner('Searching for answers....'):
       prediction = pipe.run(query=text, params={"Retriever": {"top_k": 1}})
-      st.write('answer: {}'.format(print_answers(prediction, details="minimum")))
-    st.write("")                  
+      st.write('answer: {}'.format(prediction['answers'][0].answer))
+    st.write("")
