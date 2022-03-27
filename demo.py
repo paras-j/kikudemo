@@ -62,9 +62,7 @@
 #       st.write('answer: {}'.format(print_answers(prediction, details="all")))
 #     st.write("")
 
-    
-    
-    
+
     
 from haystack.document_stores import ElasticsearchDocumentStore
 from haystack.nodes import EmbeddingRetriever
@@ -72,13 +70,24 @@ import pandas as pd
 import requests
 import streamlit as st
 
-# import os
-# from subprocess import Popen, PIPE, STDOUT
+import os
+import subprocess
+from subprocess import Popen, PIPE, STDOUT
+import wget
+import time
 
-# #urllib.request.urlopen('https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz')
-
-# import wget
-# url = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz'
+@st.cache(allow_output_mutation=True, suppress_st_warning=True)
+def startES():
+    url = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz'
+    os.system("wget -nc -q {url}")
+    
+    os.system("wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz -q")
+    os.system("tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz")
+    os.system("chown -R daemon:daemon elasticsearch-7.9.2")
+    es_server = Popen(args=['elasticsearch-7.9.2/bin/elasticsearch'],
+                      stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
+    time.sleep(30)
+    return
 
 # import tarfile
 # filename = tarfile.open(wget.download(url))
@@ -97,19 +106,21 @@ import streamlit as st
 # time.sleep(30)
 # st.write("ES server started")
 
-code = '''url = """https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz"""
-RUN wget -nc -q {url}
-RUN tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz
+# code = '''url = """https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-linux-x86_64.tar.gz"""
+# RUN wget -nc -q {url}
+# RUN tar -xzf elasticsearch-7.9.2-linux-x86_64.tar.gz
 
-import os
-from subprocess import Popen, PIPE, STDOUT
-RUN chown -R daemon:daemon elasticsearch-7.9.2
-es_server = Popen(args=['elasticsearch-7.9.2/bin/elasticsearch'],
-                  stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
-!sleep 30'''
+# import os
+# from subprocess import Popen, PIPE, STDOUT
+# RUN chown -R daemon:daemon elasticsearch-7.9.2
+# es_server = Popen(args=['elasticsearch-7.9.2/bin/elasticsearch'],
+#                   stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
+# !sleep 30'''
 
-@st.cache(allow_output_mutation=True, suppress_st_warning=True)
-st.code(code, language='python')
+# @st.cache(allow_output_mutation=True, suppress_st_warning=True)
+# st.code(code, language='python')
+
+startES()
                   
 from haystack.document_stores import ElasticsearchDocumentStore
 document_store = ElasticsearchDocumentStore(
